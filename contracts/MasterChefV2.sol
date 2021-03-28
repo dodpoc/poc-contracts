@@ -78,13 +78,17 @@ contract MasterChefV2 is Ownable, ReentrancyGuard {
         LaboToken _labo,
         address _devaddr,
         address _feeAddress,
-        uint256 _laboPerBlock,
-        uint256 _startBlock
+        uint256 _laboPerBlock
     ) public {
         labo = _labo;
         devaddr = _devaddr;
         feeAddress = _feeAddress;
         laboPerBlock = _laboPerBlock;
+    }
+
+    function setStartBlock(uint256 _startBlock) public onlyOwner {
+        require(startBlock == 0, "already started");
+        require(_startBlock > block.number + 200, "start block has to be further in the future");
         startBlock = _startBlock;
     }
 
