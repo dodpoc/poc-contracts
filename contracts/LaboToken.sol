@@ -3,7 +3,7 @@ pragma solidity 0.6.12;
 import "./libs/BEP20.sol";
 
 // EggToken with Governance.
-contract EggToken is BEP20('Goose Golden Egg', 'EGG') {
+contract LaboToken is BEP20('The Lab Finance LABO', 'LABO') {
     /// @notice Creates `_amount` token to `_to`. Must only be called by the owner (MasterChef).
     function mint(address _to, uint256 _amount) public onlyOwner {
         _mint(_to, _amount);
@@ -17,7 +17,7 @@ contract EggToken is BEP20('Goose Golden Egg', 'EGG') {
     // https://github.com/compound-finance/compound-protocol/blob/master/contracts/Governance/Comp.sol
 
     /// @notice A record of each accounts delegate
-    mapping (address => address) internal _delegates;
+    mapping(address => address) internal _delegates;
 
     /// @notice A checkpoint for marking number of votes from a given block
     struct Checkpoint {
@@ -26,10 +26,10 @@ contract EggToken is BEP20('Goose Golden Egg', 'EGG') {
     }
 
     /// @notice A record of votes checkpoints for each account, by index
-    mapping (address => mapping (uint32 => Checkpoint)) public checkpoints;
+    mapping(address => mapping(uint32 => Checkpoint)) public checkpoints;
 
     /// @notice The number of checkpoints for each account
-    mapping (address => uint32) public numCheckpoints;
+    mapping(address => uint32) public numCheckpoints;
 
     /// @notice The EIP-712 typehash for the contract's domain
     bytes32 public constant DOMAIN_TYPEHASH = keccak256("EIP712Domain(string name,uint256 chainId,address verifyingContract)");
@@ -38,9 +38,9 @@ contract EggToken is BEP20('Goose Golden Egg', 'EGG') {
     bytes32 public constant DELEGATION_TYPEHASH = keccak256("Delegation(address delegatee,uint256 nonce,uint256 expiry)");
 
     /// @notice A record of states for signing / validating signatures
-    mapping (address => uint) public nonces;
+    mapping(address => uint) public nonces;
 
-      /// @notice An event thats emitted when an account changes its delegate
+    /// @notice An event thats emitted when an account changes its delegate
     event DelegateChanged(address indexed delegator, address indexed fromDelegate, address indexed toDelegate);
 
     /// @notice An event thats emitted when a delegate account's vote balance changes
@@ -51,17 +51,17 @@ contract EggToken is BEP20('Goose Golden Egg', 'EGG') {
      * @param delegator The address to get delegatee for
      */
     function delegates(address delegator)
-        external
-        view
-        returns (address)
+    external
+    view
+    returns (address)
     {
         return _delegates[delegator];
     }
 
-   /**
-    * @notice Delegate votes from `msg.sender` to `delegatee`
-    * @param delegatee The address to delegate votes to
-    */
+    /**
+     * @notice Delegate votes from `msg.sender` to `delegatee`
+     * @param delegatee The address to delegate votes to
+     */
     function delegate(address delegatee) external {
         return _delegate(msg.sender, delegatee);
     }
@@ -83,7 +83,7 @@ contract EggToken is BEP20('Goose Golden Egg', 'EGG') {
         bytes32 r,
         bytes32 s
     )
-        external
+    external
     {
         bytes32 domainSeparator = keccak256(
             abi.encode(
@@ -124,9 +124,9 @@ contract EggToken is BEP20('Goose Golden Egg', 'EGG') {
      * @return The number of current votes for `account`
      */
     function getCurrentVotes(address account)
-        external
-        view
-        returns (uint256)
+    external
+    view
+    returns (uint256)
     {
         uint32 nCheckpoints = numCheckpoints[account];
         return nCheckpoints > 0 ? checkpoints[account][nCheckpoints - 1].votes : 0;
@@ -140,9 +140,9 @@ contract EggToken is BEP20('Goose Golden Egg', 'EGG') {
      * @return The number of votes the account had as of the given block
      */
     function getPriorVotes(address account, uint blockNumber)
-        external
-        view
-        returns (uint256)
+    external
+    view
+    returns (uint256)
     {
         require(blockNumber < block.number, "EGG::getPriorVotes: not yet determined");
 
@@ -164,7 +164,8 @@ contract EggToken is BEP20('Goose Golden Egg', 'EGG') {
         uint32 lower = 0;
         uint32 upper = nCheckpoints - 1;
         while (upper > lower) {
-            uint32 center = upper - (upper - lower) / 2; // ceil, avoiding overflow
+            uint32 center = upper - (upper - lower) / 2;
+            // ceil, avoiding overflow
             Checkpoint memory cp = checkpoints[account][center];
             if (cp.fromBlock == blockNumber) {
                 return cp.votes;
@@ -178,10 +179,11 @@ contract EggToken is BEP20('Goose Golden Egg', 'EGG') {
     }
 
     function _delegate(address delegator, address delegatee)
-        internal
+    internal
     {
         address currentDelegate = _delegates[delegator];
-        uint256 delegatorBalance = balanceOf(delegator); // balance of underlying EGGs (not scaled);
+        uint256 delegatorBalance = balanceOf(delegator);
+        // balance of underlying EGGs (not scaled);
         _delegates[delegator] = delegatee;
 
         emit DelegateChanged(delegator, currentDelegate, delegatee);
@@ -215,7 +217,7 @@ contract EggToken is BEP20('Goose Golden Egg', 'EGG') {
         uint256 oldVotes,
         uint256 newVotes
     )
-        internal
+    internal
     {
         uint32 blockNumber = safe32(block.number, "EGG::_writeCheckpoint: block number exceeds 32 bits");
 
@@ -230,13 +232,13 @@ contract EggToken is BEP20('Goose Golden Egg', 'EGG') {
     }
 
     function safe32(uint n, string memory errorMessage) internal pure returns (uint32) {
-        require(n < 2**32, errorMessage);
+        require(n < 2 ** 32, errorMessage);
         return uint32(n);
     }
 
     function getChainId() internal pure returns (uint) {
         uint256 chainId;
-        assembly { chainId := chainid() }
+        assembly {chainId := chainid()}
         return chainId;
     }
 }
