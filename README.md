@@ -1,12 +1,14 @@
-# Goose Finance
+# The Lab Finance
 
-https://goosedefi.com Feel free to read the code. More details coming soon.
+Project page: https://thelab.finance
+
+The Lab is a community-centered BSC farming solution with an innovative NFT-based Governance Model.  
+Vision and roadmap: https://thelabfinance.medium.com
 
 ## Deployed Contracts / Hash
 
-### BSCMAINNET
+#### BSCMAINNET
 
-- EggToken - https://bscscan.com/token/0xf952fc3ca7325cc27d15885d37117676d25bfda6
-- MasterChef - https://bscscan.com/address/0xe70E9185F5ea7Ba3C5d63705784D8563017f2E57
-- Timelock - https://bscscan.com/address/0x2Ef488DE034567e9B8D312928fD52812A242aB3A
-- MultiCall - https://bscscan.com/address/0x1ee38d535d541c55c9dae27b12edf090c608e6fb
+- [LaboToken](https://bscscan.com/address/0x171401a3d18b21bfa3f9bf4f9637f3691158365a#code)
+- [MasterChefV2](https://bscscan.com/address/0x30f4cb706e65ABB3cbC3fFC2805E8Ff50eA8fbC8#code)
+- [Timelock](https://bscscan.com/address/0x0A974345327c8A7d7FC2e5eD6e2DE6343500660E#code)
